@@ -15,6 +15,7 @@ Run the below line.<br>
 Now, node_modules folder created in the folder that contains app.js. 
 
 ## CRD Procedures
+All CRD process in the terminal itself.
 
 ### Create:
 Run the below line with your mail ID (this is our <b>key</b>) and data. <br>
