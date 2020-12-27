@@ -5,7 +5,7 @@ I have done this assignment using Node JS.
 ## Configuration Steps
 
 ### Step 1:
-After downloading this assignment, Make sure to open the IDE in the folder that contains app.js file.
+After downloading this assignment, Make sure to open the IDE or editor in the folder that contains app.js file.
 
 ### Step 2:
 Run the below line.<br>
