@@ -5,14 +5,14 @@ I have done this assignment using Node JS.
 ## Configuration Steps
 
 ### Step 1:
-After downloading this assignment, Make sure you are in the folder that contains app.js
+After downloading this assignment, Make sure to open the IDE in the folder that contains app.js file.
 
 ### Step 2:
 Run the below line.<br>
 <code>npm install</code>
 
 ### Step 3:
-Now, node_modules folder created in the folder that contains app.js. 
+Now, node_modules folder created in the folder that contains app.js file. 
 
 ## CRD Procedures
 All CRD process in the terminal itself.
