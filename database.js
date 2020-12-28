@@ -9,8 +9,7 @@ const createData = (mail, data, ttl = null) => {
     return data.mail === mail;
   });
 
-  const creationTime = moment().format("LTS");
-  // console.log(creationTime);
+  const creationTime = moment().format("MMMM Do YYYY, h:mm:ss A");
 
   if (duplicateData.length === 0) {
     database.push({
@@ -21,7 +20,7 @@ const createData = (mail, data, ttl = null) => {
     });
     saveDatabase(database);
     console.log(
-      chalk.green("Success Data Added... :)\n\n") +
+      chalk.green("Success Data created... :)\n\n") +
         chalk.yellow(
           "Check " +
             chalk.red("database.json") +
@@ -54,7 +53,7 @@ const readData = (mail) => {
       console.log(chalk.green("Hola, We retrived a data as JSON :)\n"));
       console.log(JSON.stringify(data));
     } else {
-      const creationTime = moment(data.time, "h:mm:ss a")
+      const creationTime = moment(data.time, "MMMM Do YYYY, h:mm:ss A")
         .add(data.ttl, "minutes")
         .format("LTS");
 
@@ -62,14 +61,13 @@ const readData = (mail) => {
       var beginningTime = moment(creationTime, "h:mm:ss a");
       var endTime = moment(currentTime, "h:mm:ss a");
 
-      console.log(beginningTime);
       if (beginningTime.isBefore(endTime)) {
-        console.log(chalk.red("Data expired..."));
+        console.log(chalk.red("Data expired to read :("));
       } else {
         console.log(
           chalk.blue(
             "Data not expired. It will expires on " +
-              beginningTime.format("LTS") +
+              chalk.red(beginningTime.format("MMMM Do YYYY, h:mm:ss A")) +
               "."
           )
         );
@@ -91,19 +89,55 @@ const readData = (mail) => {
 
 const deleteData = (mail) => {
   const database = loadDatabase();
-  const dataToKeep = database.filter((data) => {
-    return data.mail !== mail;
+
+  const dataToDelete = database.find((data) => {
+    return data.mail === mail;
   });
-  saveDatabase(dataToKeep);
-  if (database.length > dataToKeep.length) {
-    console.log(
-      chalk.green("User Data Deleted successfully... :)\n\n") +
-        chalk.yellow(
-          "Check " +
-            chalk.red("database.json") +
-            " file in the current project directory."
-        )
-    );
+
+  if (dataToDelete) {
+    if (dataToDelete.ttl === null) {
+      const dataToKeep = database.filter((data) => {
+        return data.mail !== mail;
+      });
+      saveDatabase(dataToKeep);
+      if (database.length > dataToKeep.length) {
+        console.log(
+          chalk.green("User Data Deleted successfully... :)\n\n") +
+            chalk.yellow(
+              "Check " +
+                chalk.red("database.json") +
+                " file in the current project directory."
+            )
+        );
+      }
+    } else {
+      const creationTime = moment(dataToDelete.time, "MMMM Do YYYY, h:mm:ss A")
+        .add(dataToDelete.ttl, "minutes")
+        .format("LTS");
+
+      const currentTime = moment().format("LTS");
+      var beginningTime = moment(creationTime, "h:mm:ss a");
+      var endTime = moment(currentTime, "h:mm:ss a");
+
+      if (beginningTime.isBefore(endTime)) {
+        console.log(chalk.red("Data expired to delete :("));
+      } else {
+        const dataToKeep = database.filter((data) => {
+          return data.mail !== mail;
+        });
+        saveDatabase(dataToKeep);
+        if (database.length > dataToKeep.length) {
+          console.log(
+            chalk.green("User Data Deleted successfully... :)\n\n") +
+              chalk.yellow(
+                "Check " +
+                  chalk.red("database.json") +
+                  " file in the current project directory."
+              )
+          );
+        }
+      }
+    }
   } else {
     console.log(
       chalk.red("No data found... :(\n\n") +
