@@ -21,9 +21,14 @@ yargs.command({
       demandOption: true,
       type: String,
     },
+    ttl: {
+      describe: "Time To Live (in mins)",
+      demandOption: false,
+      type: Number,
+    },
   },
   handler: function (argv) {
-    database.createData(argv.mail, argv.data);
+    database.createData(argv.mail, argv.data, argv.ttl);
   },
 });
 

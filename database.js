@@ -1,17 +1,23 @@
 const fs = require("fs");
 const chalk = require("chalk");
+const moment = require("moment");
 
-const createData = (mail, data) => {
+const createData = (mail, data, ttl = null) => {
   const database = loadDatabase();
 
   const duplicateData = database.filter((data) => {
     return data.mail === mail;
   });
 
+  const creationTime = moment().format("LTS");
+  // console.log(creationTime);
+
   if (duplicateData.length === 0) {
     database.push({
       mail: mail,
       data: data,
+      ttl: ttl,
+      time: creationTime,
     });
     saveDatabase(database);
     console.log(
@@ -41,8 +47,36 @@ const readData = (mail) => {
   });
 
   if (data) {
-    console.log(chalk.green("Hola, We retrived a data as JSON :)\n"));
-    console.log(JSON.stringify(data));
+    if (data.ttl === null) {
+      console.log(
+        chalk.blue("Time To Live is null. Anytime you can access this data.")
+      );
+      console.log(chalk.green("Hola, We retrived a data as JSON :)\n"));
+      console.log(JSON.stringify(data));
+    } else {
+      const creationTime = moment(data.time, "h:mm:ss a")
+        .add(data.ttl, "minutes")
+        .format("LTS");
+
+      const currentTime = moment().format("LTS");
+      var beginningTime = moment(creationTime, "h:mm:ss a");
+      var endTime = moment(currentTime, "h:mm:ss a");
+
+      console.log(beginningTime);
+      if (beginningTime.isBefore(endTime)) {
+        console.log(chalk.red("Data expired..."));
+      } else {
+        console.log(
+          chalk.blue(
+            "Data not expired. It will expires on " +
+              beginningTime.format("LTS") +
+              "."
+          )
+        );
+        console.log(chalk.green("Hola, We retrived a data as JSON :)\n"));
+        console.log(JSON.stringify(data));
+      }
+    }
   } else {
     console.log(
       chalk.red("Data not found... :(\n\n") +
