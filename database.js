@@ -42,7 +42,7 @@ const readData = (mail) => {
 
   if (data) {
     console.log(chalk.green("Hola, We retrived a data as JSON :)\n"));
-    console.log(data);
+    console.log(JSON.stringify(data));
   } else {
     console.log(
       chalk.red("Data not found... :(\n\n") +
