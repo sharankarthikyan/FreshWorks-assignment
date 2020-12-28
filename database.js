@@ -10,7 +10,6 @@ const createData = (mail, data, ttl = null) => {
   });
 
   const creationTime = moment().format("LTS");
-  // console.log(creationTime);
 
   if (duplicateData.length === 0) {
     database.push({
@@ -62,7 +61,6 @@ const readData = (mail) => {
       var beginningTime = moment(creationTime, "h:mm:ss a");
       var endTime = moment(currentTime, "h:mm:ss a");
 
-      console.log(beginningTime);
       if (beginningTime.isBefore(endTime)) {
         console.log(chalk.red("Data expired..."));
       } else {
